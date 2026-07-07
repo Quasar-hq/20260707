@@ -6,22 +6,28 @@
   <title>로또 추첨기</title>
   <style>
     :root {
-      --bg: #121212;
-      --surface: #181818;
-      --surface-2: #1f1f1f;
-      --surface-3: #252525;
-      --text: #ffffff;
-      --muted: #b3b3b3;
-      --line: #4d4d4d;
-      --green: #1ed760;
-      --green-strong: #1db954;
-      --red: #f3727f;
-      --shadow-lg: rgba(0, 0, 0, 0.5) 0px 8px 24px;
-      --shadow-md: rgba(0, 0, 0, 0.3) 0px 8px 8px;
-      --inset-border: rgb(18, 18, 18) 0px 1px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset;
-      --radius-card: 10px;
-      --radius-pill: 9999px;
-      --radius-circle: 50%;
+      --primary: #0070d1;
+      --primary-pressed: #0064b7;
+      --primary-active: #004d8d;
+      --commerce: #d53b00;
+      --ink: #000000;
+      --ink-deep: #121314;
+      --surface-dark: #181818;
+      --surface-dark-elevated: #121314;
+      --surface-blue: #0070d1;
+      --surface-white: #ffffff;
+      --surface-soft: #f3f3f3;
+      --surface-card: #f5f7fa;
+      --hairline-light: #e5e5e5;
+      --hairline-dark: rgba(255, 255, 255, 0.16);
+      --body-light: rgba(0, 0, 0, 0.6);
+      --body-dark: rgba(255, 255, 255, 0.7);
+      --mute-light: #6b6b6b;
+      --mute-dark: rgba(255, 255, 255, 0.55);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-full: 9999px;
+      --shadow-soft: none;
       --ball-size: 64px;
     }
 
@@ -29,241 +35,216 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       min-height: 100%;
     }
 
     body {
       min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(30, 215, 96, 0.08), transparent 30%),
-        linear-gradient(180deg, #121212 0%, #101010 100%);
-      color: var(--text);
-      font-family: "SpotifyMixUI", "SpotifyMixUITitle", "CircularSp-Arab", "CircularSp-Hebr", "CircularSp-Cyrl", "CircularSp-Grek", "CircularSp-Deva", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic", sans-serif;
-      letter-spacing: 0.14px;
+      background: #000000;
+      color: #ffffff;
+      font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      letter-spacing: 0.1px;
     }
 
     .app {
-      width: min(1240px, calc(100vw - 32px));
-      margin: 16px auto;
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      min-height: 100vh;
       display: grid;
-      grid-template-columns: 250px minmax(0, 1fr);
-      gap: 16px;
-      min-height: calc(100vh - 32px);
-    }
-
-    .sidebar,
-    .content,
-    .card {
-      background: var(--surface);
-      box-shadow: var(--shadow-md);
+      grid-template-columns: 1fr;
+      background: #000000;
     }
 
     .sidebar {
-      border-radius: 12px;
-      padding: 20px 16px;
-      display: grid;
-      align-content: start;
-      gap: 18px;
+      padding: 18px 24px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px 24px;
+      background: #000000;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .brand {
-      display: grid;
-      gap: 6px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 260px;
     }
 
     .brand-mark {
       width: 40px;
       height: 40px;
-      border-radius: var(--radius-circle);
-      background: var(--green);
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
       display: grid;
       place-items: center;
-      color: #08110a;
-      font-weight: 800;
-      box-shadow: var(--shadow-md);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      flex: 0 0 auto;
     }
 
     .brand-title {
       margin: 0;
-      font-size: 1.5rem;
-      line-height: 1.1;
-      font-weight: 700;
-    }
-
-    .brand-subtitle {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.45;
+      font-size: 1.13rem;
+      line-height: 1.25;
+      font-weight: 300;
+      letter-spacing: 0;
     }
 
     .nav {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
       gap: 8px;
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: var(--radius-pill);
+      gap: 0;
+      padding: 8px 16px;
+      border-radius: 9999px;
       background: transparent;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.7);
       font-size: 0.88rem;
       font-weight: 400;
+      border: 1px solid transparent;
     }
 
     .nav-item.active {
-      background: var(--surface-2);
-      color: var(--text);
+      color: #ffffff;
       font-weight: 700;
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
     .nav-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: currentColor;
-      flex: 0 0 auto;
-    }
-
-    .sidebar-note {
-      margin-top: auto;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--muted);
-      font-size: 0.82rem;
-      line-height: 1.55;
+      display: none;
     }
 
     .content {
-      border-radius: 12px;
-      padding: 24px;
       display: grid;
-      gap: 16px;
-      align-content: start;
+      gap: 64px;
+      background: #000000;
     }
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(300px, 0.7fr);
-      gap: 16px;
-      align-items: stretch;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 0;
+    }
+
+    .dark-band {
+      background: #000000;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .light-band {
+      background: #ffffff;
+      color: #000000;
+      border-bottom: 1px solid #f3f3f3;
+    }
+
+    .blue-band {
+      background: var(--primary);
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .hero-card,
+    .draw-card,
+    .history-card {
+      border-radius: 0;
     }
 
     .hero-card {
-      position: relative;
-      overflow: hidden;
-      border-radius: 14px;
-      background:
-        linear-gradient(135deg, rgba(30, 215, 96, 0.16), rgba(31, 31, 31, 0.92) 42%, rgba(18, 18, 18, 0.98) 100%);
-      box-shadow: var(--shadow-lg);
-      padding: 28px;
-      display: grid;
-      gap: 18px;
-      min-height: 100%;
+      padding: 64px 32px;
     }
 
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -80px -80px auto;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(30, 215, 96, 0.28), transparent 62%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      margin: 0;
-      color: var(--green);
-      text-transform: uppercase;
-      letter-spacing: 1.4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.75rem);
-      line-height: 1;
-      font-weight: 700;
-      letter-spacing: -0.04em;
+    .hero-card h1 {
+      margin: 0 0 12px;
       max-width: 12ch;
-    }
-
-    .hero-copy {
-      margin: 0;
-      max-width: 50ch;
-      color: #cbcbcb;
-      font-size: 1rem;
-      line-height: 1.45;
-    }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      font-family: "Roboto", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: clamp(2.25rem, 4vw, 3.75rem);
+      line-height: 1.25;
+      font-weight: 300;
+      letter-spacing: -0.1px;
     }
 
     .pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 14px;
-      border-radius: var(--radius-pill);
-      background: var(--surface-2);
-      color: var(--text);
-      font-size: 0.88rem;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      font-size: 0.875rem;
       font-weight: 700;
-      box-shadow: var(--inset-border);
+      line-height: 1.25;
+      letter-spacing: 0.324px;
+      box-shadow: none;
+      border: 1px solid transparent;
     }
 
     .pill.muted {
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.7);
       font-weight: 400;
+    }
+
+    .light-band .pill {
+      background: #1f1f1f;
+      color: #ffffff;
+    }
+
+    .light-band .pill.muted {
+      color: #b3b3b3;
+    }
+
+    .blue-band .pill {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
     }
 
     .stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
+      gap: 12px;
+      margin-top: 16px;
     }
 
     .stat {
-      background: var(--surface-2);
-      border-radius: 12px;
-      padding: 14px;
-      box-shadow: var(--inset-border);
+      background: #181818;
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .stat .label {
       display: block;
-      color: var(--muted);
-      font-size: 0.74rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
       margin-bottom: 8px;
-      font-weight: 700;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.875rem;
+      letter-spacing: 0;
+      text-transform: none;
+      font-weight: 400;
     }
 
     .stat .value {
-      font-size: 1rem;
+      font-size: 1.125rem;
       font-weight: 700;
+      color: #ffffff;
     }
 
     .draw-card {
-      border-radius: 14px;
-      background: var(--surface-2);
-      box-shadow: var(--shadow-lg);
-      padding: 22px;
-      display: grid;
-      gap: 16px;
-      align-content: start;
+      padding: 64px 32px;
     }
 
     .draw-head {
@@ -276,67 +257,63 @@
     .draw-head h2,
     .history-head h3 {
       margin: 0;
-      font-size: 1.13rem;
-      line-height: 1.3;
-      font-weight: 700;
+      font-size: 1.5rem;
+      line-height: 1.25;
+      font-weight: 300;
+      color: inherit;
     }
 
     .divider {
       height: 1px;
-      background: rgba(255, 255, 255, 0.08);
+      background: currentColor;
+      opacity: 0.08;
     }
 
     .result {
-      min-height: 176px;
-      border-radius: 12px;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015)),
-        var(--surface);
-      box-shadow: var(--inset-border);
+      min-height: 140px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid #e5e5e5;
       display: grid;
       place-items: center;
-      padding: 18px;
+      padding: 16px;
+      box-shadow: none;
     }
 
     .balls {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
+      width: 100%;
+      overflow-x: auto;
     }
 
     .ball {
-      width: var(--ball-size);
-      height: var(--ball-size);
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       display: grid;
       place-items: center;
-      color: #101010;
+      background: #ffffff;
+      border: 1px solid #d9d9d9;
+      color: #000000;
       font-size: 1.2rem;
-      font-weight: 800;
-      box-shadow:
-        inset 0 8px 12px rgba(255, 255, 255, 0.42),
-        inset 0 -10px 14px rgba(0, 0, 0, 0.18),
-        0 8px 18px rgba(0, 0, 0, 0.28);
+      font-weight: 700;
+      box-shadow: none;
       animation: pop 220ms ease both;
     }
-
-    .ball:nth-child(1) { background: linear-gradient(145deg, #fef08a, #facc15); }
-    .ball:nth-child(2) { background: linear-gradient(145deg, #a7f3d0, #22c55e); }
-    .ball:nth-child(3) { background: linear-gradient(145deg, #bfdbfe, #60a5fa); }
-    .ball:nth-child(4) { background: linear-gradient(145deg, #fca5a5, #fb7185); }
-    .ball:nth-child(5) { background: linear-gradient(145deg, #ddd6fe, #a78bfa); }
-    .ball:nth-child(6) { background: linear-gradient(145deg, #fde68a, #f59e0b); }
 
     .bonus {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      margin-top: 12px;
       padding: 8px 14px;
-      border-radius: var(--radius-pill);
-      background: rgba(30, 215, 96, 0.12);
-      color: #dff9e8;
-      font-size: 0.88rem;
+      border-radius: 9999px;
+      background: rgba(0, 112, 209, 0.12);
+      color: var(--primary);
+      font-size: 0.875rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -349,9 +326,9 @@
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      background: var(--green);
-      color: #101010;
-      font-weight: 800;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
       letter-spacing: 0;
       text-transform: none;
     }
@@ -359,81 +336,80 @@
     .controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
     .round-input {
       min-width: 140px;
       flex: 1 1 180px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius-pill);
-      background: var(--surface);
-      color: var(--text);
-      padding: 10px 14px;
+      border: 1px solid #d9d9d9;
+      border-radius: 9999px;
+      background: #ffffff;
+      color: #000000;
+      padding: 12px 16px;
       font: inherit;
-      box-shadow: var(--inset-border);
+      box-shadow: none;
     }
 
     .round-input::placeholder {
-      color: var(--muted);
+      color: #6b6b6b;
       opacity: 1;
     }
 
     .round-input:focus {
       outline: none;
-      border-color: var(--green);
-      box-shadow: 0 0 0 1px rgba(30, 215, 96, 0.35), var(--inset-border);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(0, 112, 209, 0.18);
     }
 
     button {
       appearance: none;
       border: 0;
       cursor: pointer;
-      transition: transform 160ms ease, opacity 160ms ease, background-color 160ms ease;
       font-family: inherit;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    button:active {
-      transform: translateY(1px);
+      transition: none;
     }
 
     .btn {
-      border-radius: var(--radius-pill);
-      padding: 10px 18px;
-      font-size: 0.88rem;
+      border-radius: 9999px;
+      padding: 10px 20px;
+      font-size: 1rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.4px;
+      line-height: 1.25;
+      letter-spacing: 0.45px;
+      border: 1px solid transparent;
     }
 
     .btn-primary {
-      background: var(--green);
-      color: #101010;
-      box-shadow: 0 8px 24px rgba(30, 215, 96, 0.28);
-    }
-
-    .btn-primary:hover {
-      background: #1fdf64;
+      background: var(--primary);
+      color: #ffffff;
     }
 
     .btn-secondary {
       background: transparent;
-      color: var(--text);
-      border: 1px solid var(--line);
-      box-shadow: var(--inset-border);
+      color: #000000;
+      border-color: #7c7c7c;
+    }
+
+    .dark-band .btn-secondary,
+    .blue-band .btn-secondary {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    .blue-band .btn-primary,
+    .dark-band .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
     }
 
     .history-card {
-      border-radius: 14px;
-      background: var(--surface-2);
-      box-shadow: var(--shadow-lg);
-      padding: 22px;
-      display: grid;
-      gap: 14px;
+      padding: 32px 24px;
+    }
+
+    .history-card.dark-band,
+    .history-card.blue-band {
+      padding: 64px 32px;
     }
 
     .history-head {
@@ -441,6 +417,13 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .history-card .pill.muted {
+      background: transparent;
+      color: inherit;
+      border: 1px solid currentColor;
     }
 
     .history-list {
@@ -453,22 +436,31 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: var(--surface);
-      box-shadow: var(--inset-border);
+      padding: 12px 0;
+      border-bottom: 1px solid currentColor;
+      opacity: 0.92;
+    }
+
+    .dark-band .history-item,
+    .blue-band .history-item {
+      border-bottom-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .light-band .history-item {
+      border-bottom-color: #f3f3f3;
     }
 
     .history-item strong {
       display: block;
-      font-size: 0.92rem;
+      font-size: 1rem;
       font-weight: 700;
       margin-bottom: 2px;
     }
 
     .history-item small {
-      color: var(--muted);
-      font-size: 0.78rem;
+      color: inherit;
+      opacity: 0.7;
+      font-size: 0.875rem;
     }
 
     .history-balls {
@@ -479,30 +471,33 @@
     }
 
     .mini-ball {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       display: grid;
       place-items: center;
-      color: #101010;
-      font-size: 0.74rem;
-      font-weight: 800;
-      background: #eeeeee;
+      background: #ffffff;
+      color: #000000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid #d9d9d9;
     }
 
     .bonus-chip {
-      background: var(--green);
+      background: #ffffff;
+      color: var(--primary);
     }
 
     .empty {
-      color: var(--muted);
+      color: inherit;
+      opacity: 0.7;
       text-align: center;
-      padding: 20px 0;
+      padding: 12px 0;
       line-height: 1.5;
     }
 
     .empty.strong {
-      color: var(--text);
+      opacity: 1;
       font-weight: 700;
     }
 
@@ -517,54 +512,67 @@
       }
     }
 
-    @media (max-width: 980px) {
-      .app {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        order: 2;
-      }
-
-      .content {
-        order: 1;
-      }
-
+    @media (max-width: 1024px) {
       .hero {
         grid-template-columns: 1fr;
+      }
+
+      .hero-card,
+      .draw-card,
+      .history-card.dark-band,
+      .history-card.blue-band {
+        padding: 48px 24px;
       }
     }
 
     @media (max-width: 640px) {
-      .app {
-        width: min(100vw - 20px, 1240px);
-        margin: 10px auto;
-        min-height: calc(100vh - 20px);
+      .sidebar {
+        padding: 16px 18px;
+        align-items: flex-start;
       }
 
-      .content,
-      .sidebar {
-        padding: 18px;
+      .brand {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .nav {
+        width: 100%;
+      }
+
+      .content {
+        gap: 48px;
       }
 
       .stats {
         grid-template-columns: 1fr;
       }
 
-      .draw-head,
-      .history-head,
-      .history-item {
-        align-items: flex-start;
-      }
-
-      .draw-head,
-      .history-head,
-      .history-item {
+      .controls {
         flex-direction: column;
       }
 
-      :root {
-        --ball-size: 56px;
+      .btn,
+      .round-input {
+        width: 100%;
+      }
+
+      .hero-card,
+      .draw-card,
+      .history-card.dark-band,
+      .history-card.blue-band {
+        padding: 32px 16px;
+      }
+
+      .hero-card h1 {
+        font-size: clamp(1.8rem, 8vw, 2.6rem);
+      }
+
+      .ball {
+        flex: 0 0 48px;
+        width: 48px;
+        height: 48px;
+        font-size: 1rem;
       }
     }
   </style>
@@ -573,9 +581,8 @@
   <main class="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-mark">L</div>
-        <h2 class="brand-title">Lotto Draw</h2>
-        <p class="brand-subtitle">Dark, compact, functional. 디자인 문서의 Spotify 스타일을 로또 추첨기에 맞춰 반영했습니다.</p>
+        <div class="brand-mark">P</div>
+        <h2 class="brand-title">PlayStation Lotto</h2>
       </div>
 
       <nav class="nav" aria-label="로또 추첨 메뉴">
@@ -584,28 +591,13 @@
         <div class="nav-item"><span class="nav-dot"></span> 번호 규칙</div>
       </nav>
 
-      <div class="sidebar-note">
-        버튼은 pill 형태, 강조색은 green 하나만 사용합니다.
-        카드와 입력 감각은 어둡고 밀도 있게 유지했습니다.
-      </div>
     </aside>
 
     <section class="content">
       <section class="hero">
-        <article class="hero-card">
-          <p class="eyebrow">Spotify-inspired lotto</p>
+        <article class="hero-card dark-band">
           <div>
             <h1>오늘의 행운 번호를 뽑아보세요</h1>
-            <p class="hero-copy">
-              1부터 45까지의 숫자 중 중복 없이 6개를 뽑고, 보너스 번호 1개를 추가합니다.
-              추첨 결과는 최근 기록으로 저장되어 다시 확인할 수 있습니다.
-            </p>
-          </div>
-
-          <div class="meta-row">
-            <span class="pill">AUTO RANDOM</span>
-            <span class="pill muted">6 MAIN NUMBERS</span>
-            <span class="pill muted">1 BONUS NUMBER</span>
           </div>
 
           <div class="stats">
@@ -624,7 +616,7 @@
           </div>
         </article>
 
-        <article class="draw-card">
+        <article class="draw-card light-band">
           <div class="draw-head">
             <h2>추첨 결과</h2>
             <span class="pill">1 - 45</span>
@@ -646,20 +638,18 @@
         </article>
       </section>
 
-      <section class="history-card">
+      <section class="history-card dark-band">
         <div class="history-head">
           <h3>최근 추첨 기록</h3>
-          <span class="pill muted">MAX 5</span>
         </div>
         <div id="history" class="history-list">
           <div class="empty">아직 추첨 기록이 없습니다.</div>
         </div>
       </section>
 
-      <section class="history-card">
+      <section class="history-card blue-band">
         <div class="history-head">
           <h3>역대 당첨번호</h3>
-          <span class="pill muted" id="officialCount">LOADING</span>
         </div>
         <div class="controls">
           <input id="roundInput" class="round-input" type="number" min="1" placeholder="회차 검색" />
@@ -683,7 +673,6 @@
     const bonusInfo = document.getElementById("bonusInfo");
     const bonusValue = document.getElementById("bonusValue");
     const officialHistory = document.getElementById("officialHistory");
-    const officialCount = document.getElementById("officialCount");
     const roundInput = document.getElementById("roundInput");
     const roundSearchBtn = document.getElementById("roundSearchBtn");
     const latestBtn = document.getElementById("latestBtn");
@@ -735,8 +724,6 @@
     }
 
     function renderOfficialHistory() {
-      officialCount.textContent = `${archiveSource.length}회차`;
-
       if (!archiveView.length) {
         officialHistory.innerHTML = '<div class="empty">검색 결과가 없습니다.</div>';
         return;
