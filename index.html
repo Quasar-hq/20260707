@@ -667,7 +667,14 @@
   </main>
 
   <script src="./lotto-history-data.js"></script>
-  <script>
+  <script type="module">
+    let createClient = null;
+    try {
+      ({ createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'));
+    } catch (error) {
+      console.warn("Supabase client failed to load. The app will fall back to local storage.", error);
+    }
+
     const drawBtn = document.getElementById("drawBtn");
     const clearBtn = document.getElementById("clearBtn");
     const result = document.getElementById("result");
@@ -680,6 +687,9 @@
     const latestBtn = document.getElementById("latestBtn");
     const moreBtn = document.getElementById("moreBtn");
 
+    const SUPABASE_URL = "https://whambvatiexwtrttxefo.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndoYW1idmF0aWV4d3RydHR4ZWZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzOTU4NzcsImV4cCI6MjA5ODk3MTg3N30.Xly3MRP6IoxnDBhu9rCQhU88sQYMs_LeMmv5Aws03pM";
+    const SUPABASE_TABLE = "lotto_draws";
     const MAX_HISTORY = 5;
     const OFFICIAL_PAGE_SIZE = 20;
     const storageKey = "lotto-history";
@@ -687,6 +697,9 @@
     let archiveSource = Array.isArray(window.LOTTO_HISTORY) ? [...window.LOTTO_HISTORY].sort((a, b) => b.round - a.round) : [];
     let archiveView = archiveSource;
     let archiveLimit = OFFICIAL_PAGE_SIZE;
+    const supabase = createClient && SUPABASE_URL && SUPABASE_ANON_KEY
+      ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
 
     function loadHistory() {
       try {
@@ -699,6 +712,62 @@
 
     function saveHistory() {
       localStorage.setItem(storageKey, JSON.stringify(records));
+    }
+
+    function normalizeRecord(item) {
+      return {
+        main: Array.isArray(item.main) ? item.main : (Array.isArray(item.main_numbers) ? item.main_numbers : []),
+        bonus: Number(item.bonus ?? item.bonus_number ?? 0),
+        stamp: item.stamp || item.created_at || ""
+      };
+    }
+
+    function formatStamp(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleString("ko-KR", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    async function loadRemoteHistory() {
+      if (!supabase) return [];
+
+      const { data, error } = await supabase
+        .from(SUPABASE_TABLE)
+        .select("main_numbers, bonus_number, created_at")
+        .order("created_at", { ascending: false })
+        .limit(MAX_HISTORY);
+
+      if (error) {
+        console.warn("Supabase history load failed:", error.message);
+        return [];
+      }
+
+      return (data || []).map((item) => ({
+        main: item.main_numbers || [],
+        bonus: item.bonus_number,
+        stamp: formatStamp(item.created_at)
+      }));
+    }
+
+    async function persistDraw(record) {
+      if (!supabase) return;
+
+      const { error } = await supabase
+        .from(SUPABASE_TABLE)
+        .insert([{
+          main_numbers: record.main,
+          bonus_number: record.bonus,
+        }]);
+
+      if (error) {
+        console.warn("Supabase insert failed:", error.message);
+      }
     }
 
     function randomSet(count, min, max) {
@@ -803,6 +872,9 @@
       records = records.slice(0, MAX_HISTORY);
       saveHistory();
       renderHistory();
+      persistDraw({ main, bonus, stamp }).catch((error) => {
+        console.warn("Supabase insert failed:", error);
+      });
     }
 
     function renderHistory() {
@@ -844,8 +916,18 @@
       }
     });
 
-    renderHistory();
-    renderOfficialHistory();
+    const bootstrap = async () => {
+      const remoteHistory = await loadRemoteHistory();
+      if (remoteHistory.length) {
+        records = remoteHistory;
+        saveHistory();
+      }
+
+      renderHistory();
+      renderOfficialHistory();
+    };
+
+    bootstrap();
   </script>
 </body>
 </html>
