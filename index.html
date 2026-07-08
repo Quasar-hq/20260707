@@ -722,6 +722,11 @@
       localStorage.setItem(storageKey, JSON.stringify(records));
     }
 
+    function trackAnalyticsEvent(eventName, params = {}) {
+      if (typeof window.gtag !== "function") return;
+      window.gtag("event", eventName, params);
+    }
+
     function normalizeRecord(item) {
       return {
         main: Array.isArray(item.main) ? item.main : (Array.isArray(item.main_numbers) ? item.main_numbers : []),
@@ -859,6 +864,11 @@
     }
 
     function drawLotto() {
+      trackAnalyticsEvent("lotto_draw", {
+        event_category: "engagement",
+        event_label: "draw_button_click"
+      });
+
       const main = randomSet(6, 1, 45);
       let bonus;
       do {
